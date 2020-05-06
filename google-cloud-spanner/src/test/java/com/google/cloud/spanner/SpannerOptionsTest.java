@@ -19,6 +19,7 @@ package com.google.cloud.spanner;
 import static com.google.common.truth.Truth.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 
 import com.google.api.gax.retrying.RetrySettings;
 import com.google.api.gax.rpc.ServerStreamingCallSettings;
@@ -469,5 +470,22 @@ public class SpannerOptionsTest {
         .isEqualTo(QueryOptions.newBuilder().setOptimizerVersion("2").build());
     assertThat(options.getDefaultQueryOptions(DatabaseId.of("p", "i", "o")))
         .isEqualTo(QueryOptions.newBuilder().setOptimizerVersion("2").build());
+  }
+
+  @Test
+  public void testCompressorName() {
+    assertThat(SpannerOptions.newBuilder().setCompressorName("gzip").build().getCompressorName())
+        .isEqualTo("gzip");
+    assertThat(
+            SpannerOptions.newBuilder().setCompressorName("identity").build().getCompressorName())
+        .isEqualTo("identity");
+    assertThat(SpannerOptions.newBuilder().setCompressorName(null).build().getCompressorName())
+        .isNull();
+    try {
+      SpannerOptions.newBuilder().setCompressorName("foo");
+      fail("missing expected exception");
+    } catch (IllegalArgumentException e) {
+      // ignore, this is the expected exception.
+    }
   }
 }
