@@ -17,6 +17,7 @@
 package com.google.cloud.spanner;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import com.google.api.core.ApiFunction;
@@ -118,8 +119,6 @@ public class SpanTest {
       io.grpc.Status.FAILED_PRECONDITION
           .withDescription("Non-retryable test exception.")
           .asRuntimeException();
-
-  @Rule public ExpectedException expectedException = ExpectedException.none();
 
   @BeforeClass
   public static void startStaticServer() throws Exception {
@@ -231,23 +230,27 @@ public class SpanTest {
 
   @Test
   public void singleUseNonRetryableErrorOnNext() {
-    expectedException.expect(SpannerMatchers.isSpannerException(ErrorCode.FAILED_PRECONDITION));
     try (ResultSet rs = client.singleUse().executeQuery(SELECT1AND2)) {
       mockSpanner.addException(FAILED_PRECONDITION);
       while (rs.next()) {
         // Just consume the result set.
+        fail("");
       }
+    }catch (SpannerException ex){
+      assertEquals(ErrorCode.FAILED_PRECONDITION,ex.getErrorCode());
     }
   }
 
   @Test
   public void singleUseExecuteStreamingSqlTimeout() {
-    expectedException.expect(SpannerMatchers.isSpannerException(ErrorCode.DEADLINE_EXCEEDED));
     try (ResultSet rs = clientWithTimeout.singleUse().executeQuery(SELECT1AND2)) {
       mockSpanner.setExecuteStreamingSqlExecutionTime(ONE_SECOND);
       while (rs.next()) {
         // Just consume the result set.
+        fail("");
       }
+    }catch (SpannerException ex){
+      assertEquals(ErrorCode.DEADLINE_EXCEEDED,ex.getErrorCode());
     }
   }
 

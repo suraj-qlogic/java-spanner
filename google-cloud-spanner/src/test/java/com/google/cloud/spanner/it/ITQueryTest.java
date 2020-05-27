@@ -16,12 +16,6 @@
 
 package com.google.cloud.spanner.it;
 
-import static com.google.cloud.spanner.SpannerMatchers.isSpannerException;
-import static com.google.cloud.spanner.Type.StructField;
-import static com.google.common.truth.Truth.assertThat;
-import static java.util.Arrays.asList;
-import static org.junit.Assume.assumeFalse;
-
 import com.google.cloud.ByteArray;
 import com.google.cloud.Date;
 import com.google.cloud.Timestamp;
@@ -33,6 +27,7 @@ import com.google.cloud.spanner.Mutation;
 import com.google.cloud.spanner.ParallelIntegrationTest;
 import com.google.cloud.spanner.ReadContext.QueryAnalyzeMode;
 import com.google.cloud.spanner.ResultSet;
+import com.google.cloud.spanner.SpannerException;
 import com.google.cloud.spanner.Statement;
 import com.google.cloud.spanner.Struct;
 import com.google.cloud.spanner.TimestampBound;
@@ -41,9 +36,6 @@ import com.google.cloud.spanner.Value;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.spanner.v1.ResultSetStats;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Ignore;
@@ -53,6 +45,19 @@ import org.junit.experimental.categories.Category;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.google.cloud.spanner.SpannerMatchers.isSpannerException;
+import static com.google.cloud.spanner.Type.StructField;
+import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
 
 /** Integration tests for query execution. */
 @Category(ParallelIntegrationTest.class)
@@ -80,7 +85,12 @@ public class ITQueryTest {
   public void badQuery() {
     expectedException.expect(isSpannerException(ErrorCode.INVALID_ARGUMENT));
     expectedException.expectMessage("Unrecognized name: Apples");
-    execute(Statement.of("SELECT Apples AND Oranges"), Type.int64());
+    try {
+      execute(Statement.of("SELECT Apples AND Oranges"), Type.int64());
+      fail("");
+    } catch (SpannerException ex) {
+      assertEquals(ErrorCode.INVALID_ARGUMENT, ex.getErrorCode());
+    }
   }
 
   @Test
@@ -496,10 +506,18 @@ public class ITQueryTest {
     assumeFalse("The emulator accepts this query", env.getTestHelper().isEmulator());
 
     Struct p = structValue();
-    expectedException.expect(isSpannerException(ErrorCode.UNIMPLEMENTED));
-    expectedException.expectMessage(
-        "Unsupported query shape: " + "A struct value cannot be returned as a column value.");
-    execute(Statement.newBuilder("SELECT @p").bind("p").to(p).build(), p.getType());
+    try {
+      execute(Statement.newBuilder("SELECT @p").bind("p").to(p).build(), p.getType());
+      fail();
+    } catch (SpannerException ex) {
+      assertEquals(ErrorCode.UNIMPLEMENTED, ex.getErrorCode());
+      assertEquals(
+          "Unsupported query shape: \" + \"A struct value cannot be returned as a column value.",ex.getMessage());
+      assertTrue(
+          ex.getMessage()
+              .contains(
+                  "Unsupported query shape: \" + \"A struct value cannot be returned as a column value."));
+    }
   }
 
   @Test

@@ -16,9 +16,6 @@
 
 package com.google.cloud.spanner.it;
 
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assume.assumeFalse;
-
 import com.google.api.gax.longrunning.OperationFuture;
 import com.google.cloud.spanner.Instance;
 import com.google.cloud.spanner.InstanceAdminClient;
@@ -29,24 +26,25 @@ import com.google.cloud.spanner.IntegrationTestEnv;
 import com.google.cloud.spanner.Options;
 import com.google.common.collect.Iterators;
 import com.google.spanner.admin.instance.v1.UpdateInstanceMetadata;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assume.assumeFalse;
 
 /** Integration tests for {@link com.google.cloud.spanner.InstanceAdminClient}. */
 @Category(IntegrationTest.class)
 @RunWith(JUnit4.class)
 public class ITInstanceAdminTest {
   @ClassRule public static IntegrationTestEnv env = new IntegrationTestEnv();
-  @Rule public ExpectedException expectedException = ExpectedException.none();
   InstanceAdminClient instanceClient;
 
   @Before

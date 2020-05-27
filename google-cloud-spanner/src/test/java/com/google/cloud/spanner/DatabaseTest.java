@@ -16,21 +16,13 @@
 
 package com.google.cloud.spanner;
 
-import static com.google.common.truth.Truth.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-
 import com.google.cloud.Identity;
 import com.google.cloud.Policy;
 import com.google.cloud.Role;
 import com.google.cloud.Timestamp;
 import com.google.cloud.spanner.DatabaseInfo.State;
-import java.util.Arrays;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mock;
@@ -38,13 +30,19 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import java.util.Arrays;
+
+import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 /** Unit tests for {@link com.google.cloud.spanner.Database}. */
 @RunWith(JUnit4.class)
 public class DatabaseTest {
   private static final String NAME =
       "projects/test-project/instances/test-instance/databases/database-1";
 
-  @Rule public ExpectedException expectedException = ExpectedException.none();
   @Mock DatabaseAdminClient dbClient;
 
   @Before

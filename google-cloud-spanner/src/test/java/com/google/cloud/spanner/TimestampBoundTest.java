@@ -19,6 +19,9 @@ package com.google.cloud.spanner;
 import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.spanner.TimestampBound.Mode;
@@ -37,7 +40,6 @@ import org.junit.runners.JUnit4;
 public class TimestampBoundTest {
   private static final long TEST_TIME_SECONDS = 1444662894L;
   private static final String TEST_TIME_ISO = "2015-10-12T15:14:54Z";
-  @Rule public ExpectedException expectedException = ExpectedException.none();
 
   @Test
   public void serialization() throws Exception {
@@ -90,8 +92,12 @@ public class TimestampBoundTest {
 
   @Test
   public void exactStalenessNegative() {
-    expectedException.expect(IllegalArgumentException.class);
-    TimestampBound.ofExactStaleness(-1, TimeUnit.SECONDS);
+    try {
+      TimestampBound.ofExactStaleness(-1, TimeUnit.SECONDS);
+      fail("");
+    } catch (IllegalArgumentException ex) {
+      assertNotNull(ex.getMessage());
+    }
   }
 
   @Test
@@ -119,8 +125,12 @@ public class TimestampBoundTest {
 
   @Test
   public void maxStalenessNegative() {
-    expectedException.expect(IllegalArgumentException.class);
-    TimestampBound.ofMaxStaleness(-1, TimeUnit.SECONDS);
+    try{
+      TimestampBound.ofMaxStaleness(-1, TimeUnit.SECONDS);
+      fail("");
+    }catch (IllegalArgumentException ex){
+      assertNotNull(ex.getMessage());
+    }
   }
 
   @Test

@@ -17,6 +17,8 @@
 package com.google.cloud.spanner;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,7 +45,11 @@ public class InstanceIdTest {
 
   @Test
   public void badName() {
-    expectedException.expect(IllegalArgumentException.class);
-    InstanceId.of("bad name");
+    try {
+      InstanceId.of("bad name");
+      fail("Expected exception");
+    } catch (IllegalArgumentException e) {
+      assertNotNull(e.getMessage());
+    }
   }
 }

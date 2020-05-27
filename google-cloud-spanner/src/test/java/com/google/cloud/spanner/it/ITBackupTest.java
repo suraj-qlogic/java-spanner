@@ -16,10 +16,6 @@
 
 package com.google.cloud.spanner.it;
 
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
-
 import com.google.api.gax.longrunning.OperationFuture;
 import com.google.api.gax.paging.Page;
 import com.google.api.gax.rpc.FailedPreconditionException;
@@ -50,6 +46,15 @@ import com.google.spanner.admin.database.v1.CreateDatabaseMetadata;
 import com.google.spanner.admin.database.v1.RestoreDatabaseMetadata;
 import com.google.spanner.admin.database.v1.RestoreSourceType;
 import io.grpc.Status;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,16 +67,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
 
 /**
  * Integration tests creating, reading, updating and deleting backups. This test class combines
@@ -84,7 +83,6 @@ public class ITBackupTest {
   private static final String EXPECTED_OP_NAME_FORMAT = "%s/backups/%s/operations/";
   @ClassRule public static IntegrationTestEnv env = new IntegrationTestEnv();
 
-  @Rule public ExpectedException expectedException = ExpectedException.none();
   private DatabaseAdminClient dbAdminClient;
   private InstanceAdminClient instanceAdminClient;
   private Instance instance;
