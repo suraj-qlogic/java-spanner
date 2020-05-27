@@ -16,6 +16,13 @@
 
 package com.google.cloud.spanner.it;
 
+import static com.google.cloud.spanner.SpannerMatchers.isSpannerException;
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import com.google.cloud.ByteArray;
 import com.google.cloud.Date;
 import com.google.cloud.Timestamp;
@@ -33,15 +40,6 @@ import com.google.cloud.spanner.Struct;
 import com.google.cloud.spanner.TimestampBound;
 import com.google.cloud.spanner.Value;
 import io.grpc.Context;
-import org.hamcrest.MatcherAssert;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -50,13 +48,14 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import static com.google.cloud.spanner.SpannerMatchers.isSpannerException;
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.hamcrest.MatcherAssert;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /** Integration test for writing data to Cloud Spanner. */
 @Category(ParallelIntegrationTest.class)

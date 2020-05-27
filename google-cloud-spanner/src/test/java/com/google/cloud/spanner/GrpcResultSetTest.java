@@ -16,6 +16,12 @@
 
 package com.google.cloud.spanner;
 
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import com.google.cloud.ByteArray;
 import com.google.cloud.Date;
 import com.google.cloud.Timestamp;
@@ -30,22 +36,15 @@ import com.google.spanner.v1.QueryPlan;
 import com.google.spanner.v1.ResultSetMetadata;
 import com.google.spanner.v1.ResultSetStats;
 import com.google.spanner.v1.Transaction;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.testing.SerializableTester.reserialize;
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import javax.annotation.Nullable;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /** Unit tests for {@link com.google.cloud.spanner.AbstractResultSet.GrpcResultSet}. */
 @RunWith(JUnit4.class)
@@ -111,7 +110,7 @@ public class GrpcResultSetTest {
       resultSet.next();
       fail("");
     } catch (SpannerException ex) {
-      assertEquals(ErrorCode.DEADLINE_EXCEEDED,ex.getErrorCode());
+      assertEquals(ErrorCode.DEADLINE_EXCEEDED, ex.getErrorCode());
       assertTrue(ex.getMessage().contains("outatime"));
     }
   }
@@ -123,7 +122,7 @@ public class GrpcResultSetTest {
       resultSet.next();
       fail("");
     } catch (SpannerException ex) {
-      assertEquals(ErrorCode.INTERNAL,ex.getErrorCode());
+      assertEquals(ErrorCode.INTERNAL, ex.getErrorCode());
     }
   }
 
@@ -207,7 +206,7 @@ public class GrpcResultSetTest {
       resultSet.next();
       fail("");
     } catch (SpannerException ex) {
-      assertEquals(ErrorCode.INTERNAL,ex.getErrorCode());
+      assertEquals(ErrorCode.INTERNAL, ex.getErrorCode());
     }
   }
 

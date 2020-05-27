@@ -16,6 +16,14 @@
 
 package com.google.cloud.spanner.connection;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+
 import com.google.cloud.Timestamp;
 import com.google.cloud.spanner.ErrorCode;
 import com.google.cloud.spanner.ResultSet;
@@ -25,14 +33,6 @@ import com.google.cloud.spanner.connection.StatementResult.ResultType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
 
 @RunWith(JUnit4.class)
 public class StatementResultImplTest {

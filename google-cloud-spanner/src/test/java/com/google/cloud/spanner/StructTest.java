@@ -16,17 +16,16 @@
 
 package com.google.cloud.spanner;
 
-import com.google.common.testing.EqualsTester;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
+import static com.google.common.truth.Truth.assertThat;
 
+import com.google.common.testing.EqualsTester;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.google.common.testing.SerializableTester.reserializeAndAssert;
-import static com.google.common.truth.Truth.assertThat;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /** Unit tests for {@link com.google.cloud.spanner.Struct}. */
 @RunWith(JUnit4.class)

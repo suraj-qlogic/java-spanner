@@ -20,7 +20,6 @@ import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.google.cloud.Timestamp;
@@ -29,9 +28,7 @@ import com.google.common.testing.EqualsTester;
 import com.google.spanner.v1.TransactionOptions;
 import java.util.concurrent.TimeUnit;
 import org.hamcrest.MatcherAssert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -125,10 +122,10 @@ public class TimestampBoundTest {
 
   @Test
   public void maxStalenessNegative() {
-    try{
+    try {
       TimestampBound.ofMaxStaleness(-1, TimeUnit.SECONDS);
       fail("");
-    }catch (IllegalArgumentException ex){
+    } catch (IllegalArgumentException ex) {
       assertNotNull(ex.getMessage());
     }
   }

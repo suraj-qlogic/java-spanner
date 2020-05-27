@@ -16,7 +16,6 @@
 
 package com.google.cloud.spanner.it;
 
-import static com.google.cloud.spanner.SpannerMatchers.isSpannerException;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -40,10 +39,8 @@ import com.google.cloud.spanner.Statement;
 import com.google.spanner.admin.database.v1.CreateDatabaseMetadata;
 import java.util.Collections;
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -55,11 +52,11 @@ public class ITDatabaseTest {
 
   @Test
   public void badDdl() {
-    try{
+    try {
       env.getTestHelper().createTestDatabase("CREATE TABLE T ( Illegal Way To Define A Table )");
       fail("");
-    }catch (SpannerException ex){
-      assertEquals(ErrorCode.INVALID_ARGUMENT,ex.getErrorCode());
+    } catch (SpannerException ex) {
+      assertEquals(ErrorCode.INVALID_ARGUMENT, ex.getErrorCode());
       assertTrue(ex.getMessage().contains("Syntax error on line 1"));
     }
   }

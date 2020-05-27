@@ -512,7 +512,8 @@ public class ITQueryTest {
     } catch (SpannerException ex) {
       assertEquals(ErrorCode.UNIMPLEMENTED, ex.getErrorCode());
       assertEquals(
-          "Unsupported query shape: \" + \"A struct value cannot be returned as a column value.",ex.getMessage());
+          "Unsupported query shape: \" + \"A struct value cannot be returned as a column value.",
+          ex.getMessage());
       assertTrue(
           ex.getMessage()
               .contains(

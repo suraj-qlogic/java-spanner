@@ -16,18 +16,18 @@
 
 package com.google.cloud.spanner;
 
-import com.google.spanner.v1.TypeCode;
-import org.hamcrest.MatcherAssert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import static com.google.cloud.spanner.Type.StructField;
 import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import com.google.spanner.v1.TypeCode;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /** Unit tests for {@link com.google.cloud.spanner.Type}. */
 @RunWith(JUnit4.class)
@@ -289,10 +289,10 @@ public class TypeTest {
   @Test
   public void structFieldIndexNotFound() {
     Type t = Type.struct(StructField.of("f1", Type.int64()));
-    try{
+    try {
       t.getFieldIndex("f2");
       fail("");
-    }catch (IllegalArgumentException ex){
+    } catch (IllegalArgumentException ex) {
       assertTrue(ex.getMessage().contains("Field not found: f2"));
     }
   }
@@ -300,10 +300,10 @@ public class TypeTest {
   @Test
   public void structFieldIndexAmbiguous() {
     Type t = Type.struct(StructField.of("f1", Type.int64()), StructField.of("f1", Type.string()));
-    try{
+    try {
       t.getFieldIndex("f1");
       fail("");
-    }catch (IllegalArgumentException ex){
+    } catch (IllegalArgumentException ex) {
       assertTrue(ex.getMessage().contains("Ambiguous field name: f1"));
     }
   }
@@ -311,10 +311,10 @@ public class TypeTest {
   @Test
   public void parseErrorMissingTypeCode() {
     com.google.spanner.v1.Type proto = com.google.spanner.v1.Type.newBuilder().build();
-    try{
+    try {
       Type.fromProto(proto);
       fail("");
-    }catch (IllegalArgumentException ex){
+    } catch (IllegalArgumentException ex) {
       assertNotNull(ex.getMessage());
     }
   }
@@ -323,10 +323,10 @@ public class TypeTest {
   public void parseErrorMissingArrayElementTypeProto() {
     com.google.spanner.v1.Type proto =
         com.google.spanner.v1.Type.newBuilder().setCode(TypeCode.ARRAY).build();
-    try{
+    try {
       Type.fromProto(proto);
       fail("");
-    }catch (IllegalArgumentException ex){
+    } catch (IllegalArgumentException ex) {
       assertNotNull(ex.getMessage());
     }
   }

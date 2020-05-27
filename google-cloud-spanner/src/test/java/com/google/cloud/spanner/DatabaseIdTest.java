@@ -16,13 +16,13 @@
 
 package com.google.cloud.spanner;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /** Unit tests for {@link com.google.cloud.spanner.DatabaseId}. */
 @RunWith(JUnit4.class)

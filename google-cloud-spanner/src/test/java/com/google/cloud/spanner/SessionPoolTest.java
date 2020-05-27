@@ -17,8 +17,9 @@
 package com.google.cloud.spanner;
 
 import static com.google.cloud.spanner.MetricRegistryConstants.SPANNER_LABEL_KEYS;
-import static com.google.cloud.spanner.SpannerMatchers.isSpannerException;
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -75,9 +76,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
@@ -90,7 +89,6 @@ import org.mockito.stubbing.Answer;
 /** Tests for SessionPool that mock out the underlying stub. */
 @RunWith(Parameterized.class)
 public class SessionPoolTest extends BaseSessionPoolTest {
-  @Rule public ExpectedException expectedException = ExpectedException.none();
 
   private final ExecutorService executor = Executors.newSingleThreadExecutor();
   @Parameter public int minSessions;
@@ -511,8 +509,12 @@ public class SessionPoolTest extends BaseSessionPoolTest {
     // Suppress expected leakedSession warning.
     leakedSession.clearLeakedException();
     pool.closeAsync(new SpannerImpl.ClosedException());
-    expectedException.expect(IllegalStateException.class);
-    pool.getReadSession();
+    try {
+      pool.getReadSession();
+      fail("");
+    } catch (IllegalStateException ex) {
+      assertNotNull(ex.getMessage());
+    }
   }
 
   @Test
@@ -554,8 +556,12 @@ public class SessionPoolTest extends BaseSessionPoolTest {
         .when(sessionClient)
         .asyncBatchCreateSessions(Mockito.eq(1), Mockito.anyBoolean(), any(SessionConsumer.class));
     pool = createPool();
-    expectedException.expect(isSpannerException(ErrorCode.INTERNAL));
-    pool.getReadSession();
+    try {
+      pool.getReadSession();
+      fail("");
+    } catch (SpannerException ex) {
+      assertEquals(ErrorCode.INTERNAL, ex.getErrorCode());
+    }
   }
 
   @Test
@@ -581,8 +587,12 @@ public class SessionPoolTest extends BaseSessionPoolTest {
         .when(sessionClient)
         .asyncBatchCreateSessions(Mockito.eq(1), Mockito.anyBoolean(), any(SessionConsumer.class));
     pool = createPool();
-    expectedException.expect(isSpannerException(ErrorCode.INTERNAL));
-    pool.getReadWriteSession();
+    try {
+      pool.getReadWriteSession();
+      fail("");
+    } catch (SpannerException ex) {
+      assertEquals(ErrorCode.INTERNAL, ex.getErrorCode());
+    }
   }
 
   @Test
@@ -610,8 +620,12 @@ public class SessionPoolTest extends BaseSessionPoolTest {
         .when(session)
         .prepareReadWriteTransaction();
     pool = createPool();
-    expectedException.expect(isSpannerException(ErrorCode.INTERNAL));
-    pool.getReadWriteSession();
+    try {
+      pool.getReadWriteSession();
+      fail("");
+    } catch (SpannerException ex) {
+      assertEquals(ErrorCode.INTERNAL, ex.getErrorCode());
+    }
   }
 
   @Test
@@ -845,8 +859,12 @@ public class SessionPoolTest extends BaseSessionPoolTest {
         .asyncBatchCreateSessions(Mockito.eq(1), Mockito.anyBoolean(), any(SessionConsumer.class));
     pool = createPool();
     Session session1 = pool.getReadSession();
-    expectedException.expect(isSpannerException(ErrorCode.RESOURCE_EXHAUSTED));
-    pool.getReadSession();
+    try {
+      pool.getReadSession();
+      fail("");
+    } catch (SpannerException ex) {
+      assertEquals(ErrorCode.RESOURCE_EXHAUSTED, ex.getErrorCode());
+    }
     session1.close();
     session1 = pool.getReadSession();
     assertThat(session1).isNotNull();

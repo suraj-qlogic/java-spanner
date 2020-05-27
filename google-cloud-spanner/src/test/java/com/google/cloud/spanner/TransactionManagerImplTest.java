@@ -16,6 +16,16 @@
 
 package com.google.cloud.spanner;
 
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 import com.google.api.core.ApiFutures;
 import com.google.cloud.Timestamp;
 import com.google.cloud.grpc.GrpcTransportOptions;
@@ -28,6 +38,12 @@ import com.google.spanner.v1.BeginTransactionRequest;
 import com.google.spanner.v1.CommitRequest;
 import com.google.spanner.v1.CommitResponse;
 import com.google.spanner.v1.Transaction;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,23 +52,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(JUnit4.class)
 public class TransactionManagerImplTest {
@@ -84,36 +83,36 @@ public class TransactionManagerImplTest {
     when(session.newTransaction()).thenReturn(txn);
     assertThat(manager.begin()).isEqualTo(txn);
     assertThat(manager.getState()).isEqualTo(TransactionState.STARTED);
-    try{
+    try {
       manager.begin();
-    }catch (IllegalStateException ex){
+    } catch (IllegalStateException ex) {
       assertNotNull(ex.getMessage());
     }
   }
 
   @Test
   public void commitBeforeBeginFails() {
-    try{
+    try {
       manager.commit();
-    }catch (IllegalStateException ex){
+    } catch (IllegalStateException ex) {
       assertNotNull(ex.getMessage());
     }
   }
 
   @Test
   public void rollbackBeforeBeginFails() {
-    try{
+    try {
       manager.rollback();
-    }catch (IllegalStateException ex){
+    } catch (IllegalStateException ex) {
       assertNotNull(ex.getMessage());
     }
   }
 
   @Test
   public void resetBeforeBeginFails() {
-    try{
+    try {
       manager.resetForRetry();
-    }catch (IllegalStateException ex){
+    } catch (IllegalStateException ex) {
       assertNotNull(ex.getMessage());
     }
   }
@@ -143,9 +142,9 @@ public class TransactionManagerImplTest {
     when(session.newTransaction()).thenReturn(txn);
     manager.begin();
     manager.commit();
-    try{
+    try {
       manager.resetForRetry();
-    }catch (IllegalStateException ex){
+    } catch (IllegalStateException ex) {
       assertNotNull(ex.getMessage());
     }
   }
@@ -178,10 +177,10 @@ public class TransactionManagerImplTest {
     } catch (SpannerException e) {
       assertThat(e.getErrorCode()).isEqualTo(ErrorCode.UNKNOWN);
     }
-    try{
+    try {
       manager.resetForRetry();
       fail("");
-    }catch (IllegalStateException ex){
+    } catch (IllegalStateException ex) {
       assertNotNull(ex.getMessage());
     }
   }
@@ -191,10 +190,10 @@ public class TransactionManagerImplTest {
     when(session.newTransaction()).thenReturn(txn);
     manager.begin();
     manager.commit();
-    try{
+    try {
       manager.rollback();
       fail("");
-    }catch (IllegalStateException ex){
+    } catch (IllegalStateException ex) {
       assertNotNull(ex.getMessage());
     }
   }
@@ -204,10 +203,10 @@ public class TransactionManagerImplTest {
     when(session.newTransaction()).thenReturn(txn);
     manager.begin();
     manager.rollback();
-    try{
+    try {
       manager.commit();
       fail("");
-    }catch (IllegalStateException ex){
+    } catch (IllegalStateException ex) {
       assertNotNull(ex.getMessage());
     }
   }

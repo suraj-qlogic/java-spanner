@@ -16,6 +16,12 @@
 
 package com.google.cloud.spanner;
 
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
+import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import com.google.cloud.ByteArray;
 import com.google.cloud.Date;
 import com.google.cloud.Timestamp;
@@ -23,22 +29,15 @@ import com.google.cloud.spanner.Type.StructField;
 import com.google.common.collect.ForwardingList;
 import com.google.common.collect.Lists;
 import com.google.common.testing.EqualsTester;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.google.common.testing.SerializableTester.reserializeAndAssert;
-import static com.google.common.truth.Truth.assertThat;
-import static com.google.common.truth.Truth.assertWithMessage;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /** Unit tests for {@link com.google.cloud.spanner.Value}. */
 @RunWith(JUnit4.class)
@@ -85,10 +84,10 @@ public class ValueTest {
     assertThat(v.getType()).isEqualTo(Type.bool());
     assertThat(v.isNull()).isTrue();
     assertThat(v.toString()).isEqualTo(NULL_STRING);
-    try{
+    try {
       v.getBool();
       fail();
-    }catch (IllegalStateException ex){
+    } catch (IllegalStateException ex) {
       assertTrue(ex.getMessage().contains("null value"));
     }
   }

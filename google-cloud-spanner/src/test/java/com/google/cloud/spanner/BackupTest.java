@@ -16,12 +16,21 @@
 
 package com.google.cloud.spanner;
 
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 import com.google.cloud.Identity;
 import com.google.cloud.Policy;
 import com.google.cloud.Role;
 import com.google.cloud.Timestamp;
 import com.google.cloud.spanner.Backup.Builder;
 import com.google.cloud.spanner.BackupInfo.State;
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,16 +39,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.util.Arrays;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(JUnit4.class)
 public class BackupTest {
@@ -245,7 +244,7 @@ public class BackupTest {
       backup.restore(null);
       fail("");
     } catch (NullPointerException e) {
-      assertEquals(NullPointerException.class,e.getClass());
+      assertEquals(NullPointerException.class, e.getClass());
     }
   }
 

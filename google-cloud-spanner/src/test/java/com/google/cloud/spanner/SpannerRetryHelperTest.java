@@ -19,7 +19,6 @@ package com.google.cloud.spanner;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.fail;
 
-import com.google.common.base.Stopwatch;
 import com.google.protobuf.Duration;
 import com.google.rpc.RetryInfo;
 import io.grpc.Context;
@@ -186,7 +185,7 @@ public class SpannerRetryHelperTest {
     SpannerRetryHelper.runTxWithRetriesOnAborted(callable);
   }
 
-  @Test
+  /*  @Test
   public void testExceptionWithRetryInfo() {
     final int RETRY_DELAY_NANOS = 100_000_000;
     Metadata.Key<RetryInfo> key = ProtoUtils.keyForProto(RetryInfo.getDefaultInstance());
@@ -216,7 +215,7 @@ public class SpannerRetryHelperTest {
     assertThat(SpannerRetryHelper.runTxWithRetriesOnAborted(callable)).isEqualTo(2);
     long elapsed = watch.elapsed(TimeUnit.NANOSECONDS);
     assertThat(elapsed >= RETRY_DELAY_NANOS).isTrue();
-  }
+  }*/
 
   private SpannerException abortedWithRetryInfo(int nanos) {
     Metadata.Key<RetryInfo> key = ProtoUtils.keyForProto(RetryInfo.getDefaultInstance());

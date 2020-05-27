@@ -24,9 +24,7 @@ import static org.junit.Assert.fail;
 import com.google.cloud.ByteArray;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.testing.EqualsTester;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 

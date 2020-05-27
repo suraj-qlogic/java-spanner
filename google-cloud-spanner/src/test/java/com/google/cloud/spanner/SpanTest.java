@@ -45,10 +45,8 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.threeten.bp.Duration;
@@ -236,8 +234,8 @@ public class SpanTest {
         // Just consume the result set.
         fail("");
       }
-    }catch (SpannerException ex){
-      assertEquals(ErrorCode.FAILED_PRECONDITION,ex.getErrorCode());
+    } catch (SpannerException ex) {
+      assertEquals(ErrorCode.FAILED_PRECONDITION, ex.getErrorCode());
     }
   }
 
@@ -249,8 +247,8 @@ public class SpanTest {
         // Just consume the result set.
         fail("");
       }
-    }catch (SpannerException ex){
-      assertEquals(ErrorCode.DEADLINE_EXCEEDED,ex.getErrorCode());
+    } catch (SpannerException ex) {
+      assertEquals(ErrorCode.DEADLINE_EXCEEDED, ex.getErrorCode());
     }
   }
 

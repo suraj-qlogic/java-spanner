@@ -16,19 +16,6 @@
 
 package com.google.cloud.spanner.connection;
 
-import com.google.cloud.spanner.ErrorCode;
-import com.google.cloud.spanner.Mutation;
-import com.google.cloud.spanner.SpannerException;
-import com.google.cloud.spanner.Statement;
-import com.google.cloud.spanner.connection.StatementParser.ParsedStatement;
-import com.google.cloud.spanner.connection.StatementParser.StatementType;
-import com.google.cloud.spanner.connection.UnitOfWork.UnitOfWorkState;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
-import java.util.Arrays;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -37,6 +24,18 @@ import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import com.google.cloud.spanner.ErrorCode;
+import com.google.cloud.spanner.Mutation;
+import com.google.cloud.spanner.SpannerException;
+import com.google.cloud.spanner.Statement;
+import com.google.cloud.spanner.connection.StatementParser.ParsedStatement;
+import com.google.cloud.spanner.connection.StatementParser.StatementType;
+import com.google.cloud.spanner.connection.UnitOfWork.UnitOfWorkState;
+import java.util.Arrays;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class DmlBatchTest {
