@@ -16,6 +16,16 @@
 
 package com.google.cloud.spanner.it;
 
+<<<<<<< HEAD
+=======
+import static com.google.cloud.spanner.Type.StructField;
+import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+>>>>>>> fix: remove none()
 import com.google.cloud.ByteArray;
 import com.google.cloud.Date;
 import com.google.cloud.Timestamp;
@@ -39,10 +49,8 @@ import com.google.spanner.v1.ResultSetStats;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -65,7 +73,6 @@ import static org.junit.Assume.assumeFalse;
 public class ITQueryTest {
   @ClassRule public static IntegrationTestEnv env = new IntegrationTestEnv();
   private static Database db;
-  @Rule public ExpectedException expectedException = ExpectedException.none();
   private static DatabaseClient client;
 
   @BeforeClass
@@ -83,13 +90,12 @@ public class ITQueryTest {
 
   @Test
   public void badQuery() {
-    expectedException.expect(isSpannerException(ErrorCode.INVALID_ARGUMENT));
-    expectedException.expectMessage("Unrecognized name: Apples");
     try {
       execute(Statement.of("SELECT Apples AND Oranges"), Type.int64());
       fail("");
     } catch (SpannerException ex) {
       assertEquals(ErrorCode.INVALID_ARGUMENT, ex.getErrorCode());
+      assertThat(ex.getMessage()).contains("Unrecognized name: Apples");
     }
   }
 
@@ -528,23 +534,31 @@ public class ITQueryTest {
         env.getTestHelper().isEmulator());
 
     Struct p = structValue();
-    expectedException.expect(isSpannerException(ErrorCode.UNIMPLEMENTED));
-    expectedException.expectMessage(
-        "Unsupported query shape: "
-            + "This query can return a null-valued array of struct, "
-            + "which is not supported by Spanner.");
-    execute(
-        Statement.newBuilder("SELECT @p").bind("p").toStructArray(p.getType(), asList(p)).build(),
-        p.getType());
+    try {
+      execute(
+          Statement.newBuilder("SELECT @p").bind("p").toStructArray(p.getType(), asList(p)).build(),
+          p.getType());
+      fail("Expected exception");
+    } catch (SpannerException ex) {
+      assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.UNIMPLEMENTED);
+      assertThat(ex.getMessage())
+          .contains(
+              "Unsupported query shape: "
+                  + "This query can return a null-valued array of struct, "
+                  + "which is not supported by Spanner.");
+    }
   }
 
   @Test
   public void invalidAmbiguousFieldAccess() {
     Struct p = Struct.newBuilder().set("f1").to(20).set("f1").to("abc").build();
-
-    expectedException.expect(isSpannerException(ErrorCode.INVALID_ARGUMENT));
-    expectedException.expectMessage("Struct field name f1 is ambiguous");
-    execute(Statement.newBuilder("SELECT @p.f1").bind("p").to(p).build(), Type.int64());
+    try {
+      execute(Statement.newBuilder("SELECT @p.f1").bind("p").to(p).build(), Type.int64());
+      fail("Expected exception");
+    } catch (SpannerException ex) {
+      assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_ARGUMENT);
+      assertThat(ex.getMessage()).contains("Struct field name f1 is ambiguous");
+    }
   }
 
   private Struct structValue() {
@@ -739,8 +753,18 @@ public class ITQueryTest {
   public void unboundParameter() {
     ResultSet resultSet =
         Statement.of("SELECT @v").executeQuery(client.singleUse(TimestampBound.strong()));
+<<<<<<< HEAD
     expectedException.expect(isSpannerException(ErrorCode.INVALID_ARGUMENT));
     resultSet.next();
+=======
+    try {
+      resultSet.next();
+      fail("Expected exception");
+    } catch (SpannerException ex) {
+      assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_ARGUMENT);
+      assertThat(ex.getMessage()).contains("No parameter found for binding: v");
+    }
+>>>>>>> fix: remove none()
   }
 
   @Test
@@ -785,9 +809,13 @@ public class ITQueryTest {
             .to("(" + veryLongString)
             .build();
     ResultSet resultSet = statement.executeQuery(client.singleUse(TimestampBound.strong()));
-    expectedException.expect(isSpannerException(ErrorCode.OUT_OF_RANGE));
-    expectedException.expectMessage("Cannot parse regular expression");
-    resultSet.next();
+    try {
+      resultSet.next();
+      fail("Expected exception");
+    } catch (SpannerException ex) {
+      assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.OUT_OF_RANGE);
+      assertThat(ex.getMessage()).contains("Cannot parse regular expression");
+    }
   }
 
   @Test

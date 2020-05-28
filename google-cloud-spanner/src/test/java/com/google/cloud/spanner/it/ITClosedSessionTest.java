@@ -33,10 +33,8 @@ import com.google.cloud.spanner.TransactionRunner.TransactionCallable;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -60,7 +58,6 @@ public class ITClosedSessionTest {
       new IntegrationTestWithClosedSessionsEnv();
 
   private static Database db;
-  @Rule public ExpectedException expectedException = ExpectedException.none();
   private static DatabaseClientWithClosedSessionImpl client;
 
   @BeforeClass
@@ -272,7 +269,6 @@ public class ITClosedSessionTest {
   public void testTransactionManagerNoRecreation() {
     client.setAllowSessionReplacing(false);
     client.invalidateNextSession();
-    expectedException.expect(SessionNotFoundException.class);
     try (TransactionManager manager = client.transactionManager()) {
       TransactionContext txn = manager.begin();
       while (true) {
@@ -280,6 +276,8 @@ public class ITClosedSessionTest {
           rs.next();
         }
       }
+    } catch (SessionNotFoundException ex) {
+      assertNotNull(ex.getMessage());
     }
   }
 }
