@@ -16,6 +16,11 @@
 
 package com.google.cloud.spanner.it;
 
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
+
 import com.google.cloud.spanner.AbortedException;
 import com.google.cloud.spanner.Database;
 import com.google.cloud.spanner.DatabaseClient;
@@ -28,19 +33,13 @@ import com.google.cloud.spanner.Struct;
 import com.google.cloud.spanner.TransactionContext;
 import com.google.cloud.spanner.TransactionManager;
 import com.google.cloud.spanner.TransactionManager.TransactionState;
+import java.util.Arrays;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import java.util.Arrays;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
 
 @Category(ParallelIntegrationTest.class)
 @RunWith(JUnit4.class)

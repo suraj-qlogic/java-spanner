@@ -16,29 +16,28 @@
 
 package com.google.cloud.spanner;
 
-import com.google.cloud.ByteArray;
-import com.google.cloud.Date;
-import com.google.cloud.Timestamp;
-import com.google.common.base.Throwables;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.mockito.Mockito;
-
-import javax.annotation.Nullable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 import static com.google.cloud.spanner.Type.StructField;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.junit.runners.Parameterized.Parameter;
+
+import com.google.cloud.ByteArray;
+import com.google.cloud.Date;
+import com.google.cloud.Timestamp;
+import com.google.common.base.Throwables;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import javax.annotation.Nullable;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.mockito.Mockito;
 
 /** Unit tests for {@link AbstractStructReader} that cover all type combinations. */
 @RunWith(Parameterized.class)

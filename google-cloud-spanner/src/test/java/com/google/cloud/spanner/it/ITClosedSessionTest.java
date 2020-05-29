@@ -16,6 +16,11 @@
 
 package com.google.cloud.spanner.it;
 
+import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
+
 import com.google.cloud.spanner.AbortedException;
 import com.google.cloud.spanner.Database;
 import com.google.cloud.spanner.IntegrationTestWithClosedSessionsEnv;
@@ -30,6 +35,7 @@ import com.google.cloud.spanner.TransactionContext;
 import com.google.cloud.spanner.TransactionManager;
 import com.google.cloud.spanner.TransactionRunner;
 import com.google.cloud.spanner.TransactionRunner.TransactionCallable;
+import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -37,13 +43,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import java.util.concurrent.TimeUnit;
-
-import static com.google.common.truth.Truth.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeFalse;
 
 /** Test the automatic re-creation of sessions that have been invalidated by the server. */
 @Category(ParallelIntegrationTest.class)
